@@ -1,0 +1,18 @@
+services:
+  infra:
+    build:
+      context: services/infra
+    image: crud-generate:v0.0
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: skyramp-dev:latest
+    ports:
+      - 45555:35142
+      - 6001:3000
+    volumes:
+      - ./scripts:/scripts
+      - ${HOME}/git/letsramp/skyramp/:/home/workspace/skyramp
+      - /var/run/docker.sock:/var/run/docker.sock
+networks: {}
