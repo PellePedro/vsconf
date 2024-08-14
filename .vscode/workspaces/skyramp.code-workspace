@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"name":  "🦋 skyramp",
+			"path": "../.."
+		},
+		{
+			"name": "📦 Javascript sdk",
+			"path": "../../libs/npm"
+		},
+		{
+			"name": "🐍 Python sdk",
+			"path": "../../libs/pip"
+		},
+		{
+			"name": "📦 🧪 npm test",
+			"path": "../../libs/test/npm"
+		},
+		{
+			"name": "🐍 🧪 pip test",
+			"path": "../../libs/test/pip"
+		},
+		{
+			"name": "👁️ examples/crud-generate",
+			"path": "../../examples/v1/crud-generate/"
+		}
+	]
+}
