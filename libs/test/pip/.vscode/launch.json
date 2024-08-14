@@ -1,0 +1,40 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "🐍 Debug Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "Generate .env",
+            "env": {
+                "SKYRAMP_DEBUG" : "true",
+                "PYTHONPATH": "${workspaceFolder}/../../pip/src"
+            },
+        },
+        {
+            "name": "🐍 Debug Python: Pytest",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "${workspaceFolder}/test_skyramp.py",
+                "--maxfail=1",
+                "--disable-warnings",
+                "-v",
+                "-s"
+            ],
+            "preLaunchTask": "Generate .env",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "SKYRAMP_DEBUG" : "true",
+                "PYTHONPATH": "${workspaceFolder}/../../pip/src"
+            }
+        }
+    ]
+}
