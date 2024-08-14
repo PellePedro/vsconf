@@ -84,7 +84,7 @@ function build_all {
 # 1. build the pip package
 # 2. uninstall skyramp if it is installed
 # 3. export PYTHONPATH to the pip package
-function configure_npm_for_debugging {
+function configure_python_for_debugging {
     build_pip
     if pip show skyramp > /dev/null 2>&1; then
         echo "Uninstalling skyramp..."
@@ -105,7 +105,6 @@ function configure_npm_for_debugging {
     fi
     # Check if package.json exists, if not create it
     if [ ! -f package.json ]; then
-        echo "Creating package.json..."
         npm init -y
     fi
 
@@ -142,12 +141,6 @@ function recreate_cluster {
     popd
 }
 
-function setup_worker_for_debugging {
-    git config --global --add safe.directory /home/workspace/skyramp
-    rm -f /usr/local/lib/skyramp/idl/grpc/skyramp*.*
-    rm -rf /etc/skyramp/runtime/*
-    cp ./scripts/skyramp-init.py /
-}
 # Define two parallel arrays
 descriptions=(
     "Build all"
@@ -159,11 +152,10 @@ descriptions=(
     "Remove cluster"
     "Configure current npm project for debugging"
     "Configure current pip project for debugging"
-    "Setup worker for debugging in docker"
-    "List images in cluster"
-    "Load worker image to cluster"
-    "Compose up debug worker"
-    "Compose down debug worker"
+    "List images in k8s cluster"
+    "Load worker image to k8s cluster"
+    "Debug (up) worker in compose"
+    "Debug (down) worker in compose"
 )
 
 actions=(
@@ -175,8 +167,7 @@ actions=(
     "build_all_and_run_all_test"
     "remove_cluster"
     "configure_npm_for_debugging"
-    "configure_pip_for_debugging"
-    "setup_worker_for_debugging"
+    "configure_python_for_debugging"
     "list_cluster_images"
     "load_worker_image_to_cluster"
     "compose_up_debug_worker"
