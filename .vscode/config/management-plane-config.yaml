@@ -1,0 +1,10 @@
+managementPlaneConfig:
+  mongoConfig:
+    enabled: false
+    mongodbUrl: "mongodb://localhost:27017"
+    database: "testDB"
+    testResultCollection: "testResults"
+    mockCollection: "mocks"
+  prometheusConfig:
+    enabled: false
+    pushGatewayUrl: "http://localhost:9091"

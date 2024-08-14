@@ -1,0 +1,35 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Package",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}"
+        },
+        {
+            "name": "Launch Package",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${fileDirname}"
+        },
+        {
+            "name": "Debug Worker",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/worker",
+            "args": [
+                "-management-plane-config",
+                "${workspaceFolder}/.vscode/config/management-plane-config.yaml",
+                "-log-level",
+                "debug",
+            ],
+            "env": {
+                "DEBUGGER": "true"
+            }
+        }
+    ]
+}
