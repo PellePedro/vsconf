@@ -6,6 +6,16 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 echo "SCRIPT_DIR: $SCRIPT_DIR"
 
+if ! command -v fzf &> /dev/null; then
+    echo "fzf is not installed."
+    echo "You can install fzf on Linux using:"
+    echo "  sudo apt-get install fzf    # Debian/Ubuntu"
+    echo "  sudo yum install fzf        # CentOS/RHEL"
+    echo "  sudo pacman -S fzf          # Arch Linux"
+    echo "  brew install fzf            # macOS"
+fi
+
+
 # Environment setup
 : ${SKYRAMPDIR:=$HOME/git/letsramp/skyramp}
 : ${SAMPLE:=$SKYRAMPDIR/skyramp}
@@ -22,6 +32,7 @@ function load_worker_image_to_cluster {
     kind load docker-image $worker_url:$worker_tag --name $cluster_name
 }
 
+# launch compose with worker in debug dev container
 function compose_up_debug_worker {
     compose_dir=$SCRIPT_DIR/../dockerfiles/worker-debug
     pushd $compose_dir
@@ -56,12 +67,13 @@ function build_pip {
     python3 -m venv venv
     source $SKYRAMPDIR/venv/bin/activate
     pip install pytest
-    pushd libs/pip
-    python3 -m pip install --upgrade pip
-    python3 -m pip install --upgrade build
-    python3 -m build
-    pip install dist/*.tar.gz
-    popd
+    # Use PYTHONPATH to import the skyramp module
+    # pushd libs/pip
+    # python3 -m pip install --upgrade pip
+    # python3 -m pip install --upgrade build
+    # python3 -m build
+    # pip install dist/*.tar.gz
+    # popd
     popd
 }
 
@@ -71,13 +83,19 @@ function build_npm {
     popd
 }
 
+function make_all {
+    pushd $SKYRAMPDIR
+    make all
+    popd
+}
+
 function build_all {
-    echo "build all"
+    echo "build cli, worker, release-so, venv, npm..."
     make all
     make build-worker
     build_so
-    build_npm
     build_pip
+    build_npm
 }
 
 # configure python for debugging 
@@ -97,7 +115,7 @@ function configure_python_for_debugging {
 # 1. link the npm module @skyramp/skyramp to the global npm
 # 2. link the npm module @skyramp/skyramp to the current project
 function configure_npm_for_debugging {
-    if ! npm ls -g @skyramp/skyramp > /dev/null 2>&1; then
+    if ! npm list -g @skyramp/skyramp > /dev/null 2>&1; then
         echo "linking npm module @skyramp/skyramp"
         pushd $SKYRAMPDIR/libs/npm
         sudo npm link
@@ -122,7 +140,7 @@ function build_all_and_run_all_test {
     pushd $SKYRAMPDIR
     rm -rf mocker_test || true
     git clean -fd examples/v1
-    # build_all
+    build_all
     ./scripts/v1/run_all.sh
     popd
 }
@@ -143,10 +161,9 @@ function recreate_cluster {
 
 # Define two parallel arrays
 descriptions=(
+    "make all"
     "Build all"
     "Build library (make release-so)"
-    "Build python package"
-    "Build npm package"
     "Recreate cluster"
     "Execute run_all"
     "Remove cluster"
@@ -159,10 +176,9 @@ descriptions=(
 )
 
 actions=(
+    "make_all"
     "build_all"
     "build_so"
-    "build_pip"
-    "build_npm"
     "recreate_cluster"
     "build_all_and_run_all_test"
     "remove_cluster"

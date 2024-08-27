@@ -1,10 +1,19 @@
 {
+  // NPM launch configurations
   "version": "0.2.0",
   "configurations": [
     {
       "type": "node",
+      "name": "🚀 Launch Node Program",
+      "program": "${workspaceFolder}/server.js",
       "request": "launch",
-      "name": "docker Tests",
+      "preLaunchTask": "Generate .env",
+      "envFile": "${workspaceFolder}/.env",
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "🐳 Docker Tests",
       "preLaunchTask": "Generate .env",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "envFile": "${workspaceFolder}/.env",
@@ -16,6 +25,7 @@
       ],
       "env": {
         "SKYRAMP_DEBUG": "true",
+        "NODE_PATH": "${workspaceFolder}/node_modules:${workspaceFolder}/../../npm/"
       },
       "internalConsoleOptions": "openOnSessionStart",
       "outputCapture": "std",
@@ -27,7 +37,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "k8s Tests",
+      "name": "❖ K8S Tests",
       "preLaunchTask": "Generate .env",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "envFile": "${workspaceFolder}/.env",
