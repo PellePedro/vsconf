@@ -66,7 +66,9 @@ function build_pip {
     rm -rf $SKYRAMPDIR/venv || true
     python3 -m venv venv
     source $SKYRAMPDIR/venv/bin/activate
-    pip install pytest
+    python3 -m pip install --upgrade pip
+    pip install -r $SKYRAMPDIR/libs/test/pip/requirements.txt
+    pip install pytest pyyaml
     # Use PYTHONPATH to import the skyramp module
     # pushd libs/pip
     # python3 -m pip install --upgrade pip
@@ -109,6 +111,11 @@ function configure_python_for_debugging {
         pip uninstall -y skyramp
     fi
     export PYTHONPATH=$SKYRAMPDIR/libs/pip
+    export SHA=$(git rev-parse HEAD)
+    pushd $SKYRAMPDIR/libs/pip
+    pytest
+    popd
+
 }
 
 # In order to debug the npm module with the working code, we need to:
