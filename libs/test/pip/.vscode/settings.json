@@ -1,5 +1,9 @@
 {
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
+    "python.analysis.extraPaths": [
+        "../../pip/src", 
+        "../../../venv/lib/python3.12/site-packages"
+    ],
     "python.envFile": "${workspaceFolder}/.env"
 }

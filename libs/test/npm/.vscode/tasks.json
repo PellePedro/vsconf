@@ -5,11 +5,6 @@
             "label": "Generate .env",
             "type": "shell",
             "command": ".vscode/generate_env.sh",
-        },
-        {
-            "label": "Kill all worker containers",
-            "type": "shell",
-            "command": "docker ps | grep worker | awk '{ print $1}' | xargs -I {} docker   rm {} -f ",
         }
     ]
 }

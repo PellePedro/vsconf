@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "🐍 Debug Python: Current File",
+            "name": "🐍 Debug current python file",
             "type": "python",
             "request": "launch",
             "program": "${file}",
@@ -12,11 +12,10 @@
             "preLaunchTask": "Generate .env",
             "env": {
                 "SKYRAMP_DEBUG" : "true",
-                "PYTHONPATH": "${workspaceFolder}/../../pip/src"
             },
         },
         {
-            "name": "🐍 Debug Python: Pytest",
+            "name": "🐍 Debug test_skyramp.py",
             "type": "debugpy",
             "request": "launch",
             "module": "pytest",
@@ -33,7 +32,6 @@
             "justMyCode": true,
             "env": {
                 "SKYRAMP_DEBUG" : "true",
-                "PYTHONPATH": "${workspaceFolder}/../../pip/src"
             }
         }
     ]
