@@ -20,6 +20,19 @@ fi
 : ${SKYRAMPDIR:=$HOME/git/letsramp/skyramp}
 : ${SAMPLE:=$SKYRAMPDIR/skyramp}
 : ${SKYRAMP:=$SKYRAMPDIR/bin/skyramp}
+goVersion=go1.22.6
+
+ls $HOME/sdk
+
+if [ ! -d $HOME/sdk/${goVersion} ]; then
+    echo expecting "go version ${goVersion}"
+    exit 1
+fi
+echo "using go sdk ${goVersion}"
+export GOBIN=$HOME/go/bin
+export PATH=$HOME/sdk/$goVersion/bin:$GOBIN:$PATH
+
+
 cluster_name=$($SKYRAMP cluster list | grep context | awk '{ print $3 }' | sed 's/^kind-//')
 
 function list_cluster_images {
@@ -37,7 +50,7 @@ function compose_up_debug_worker {
     compose_dir=$SCRIPT_DIR/../dockerfiles/worker-debug
     pushd $compose_dir
     docker compose up -d --wait
-    # docker compose exec -it worker /scripts/run-once.sh 
+    docker compose exec -it worker /scripts/run-once.sh
     echo "Debug worker started on http://localhost:6001/?folder=/home/workspace/skyramp"
     popd
 }
@@ -45,7 +58,7 @@ function compose_up_debug_worker {
 function compose_down_debug_worker {
     compose_dir=$SCRIPT_DIR/../dockerfiles/worker-debug
     pushd $compose_dir
-    docker compose down 
+    docker compose down
     popd
 }
 
@@ -87,22 +100,20 @@ function build_npm {
 
 function make_all {
     pushd $SKYRAMPDIR
-    make all
+    PATH=$PATH make all
     popd
 }
 
 function build_all {
     echo "build cli, worker, release-so, venv, npm..."
-    export PATH=~/sdk/go1.22.6/bin:$PATH
-    export GOPATH=~/sdk/go1.22.6
-    make all
+    PATH=$PATH make all
     make build-worker
     build_so
     build_pip
     build_npm
 }
 
-# configure python for debugging 
+# configure python for debugging
 # 1. build the pip package
 # 2. uninstall skyramp if it is installed
 # 3. export PYTHONPATH to the pip package
@@ -112,12 +123,12 @@ function configure_python_for_debugging {
         echo "Uninstalling skyramp..."
         pip uninstall -y skyramp
     fi
-    export PYTHONPATH=$SKYRAMPDIR/libs/pip
+    pushd $SKYRAMPDIR/libs/test/pip
     export SHA=$(git rev-parse HEAD)
-    pushd $SKYRAMPDIR/libs/pip
-    pytest
+    export PYTHONPATH=$SKYRAMPDIR/libs/pip/src
+    export SKYRAMP_DEBUG=true
+    python3 -m pytest -vvv
     popd
-
 }
 
 # In order to debug the npm module with the working code, we need to:
@@ -145,11 +156,11 @@ function configure_npm_for_debugging {
     npm link @skyramp/skyramp
 }
 
-function build_all_and_run_all_test {
+function run_all_test {
     pushd $SKYRAMPDIR
     rm -rf mocker_test || true
     git clean -fd examples/v1
-    build_all
+    export SHA=$($SKYRAMP version | grep "Worker Tag" | awk '{print $4}')
     ./scripts/v1/run_all.sh
     popd
 }
@@ -189,7 +200,7 @@ actions=(
     "build_all"
     "build_so"
     "recreate_cluster"
-    "build_all_and_run_all_test"
+    "run_all_test"
     "remove_cluster"
     "configure_npm_for_debugging"
     "configure_python_for_debugging"
