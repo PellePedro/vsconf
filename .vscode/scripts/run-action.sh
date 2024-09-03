@@ -37,7 +37,7 @@ function compose_up_debug_worker {
     compose_dir=$SCRIPT_DIR/../dockerfiles/worker-debug
     pushd $compose_dir
     docker compose up -d --wait
-    docker compose exec -it worker /scripts/run-once.sh 
+    # docker compose exec -it worker /scripts/run-once.sh 
     echo "Debug worker started on http://localhost:6001/?folder=/home/workspace/skyramp"
     popd
 }
@@ -93,6 +93,8 @@ function make_all {
 
 function build_all {
     echo "build cli, worker, release-so, venv, npm..."
+    export PATH=~/sdk/go1.22.6/bin:$PATH
+    export GOPATH=~/sdk/go1.22.6
     make all
     make build-worker
     build_so

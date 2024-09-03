@@ -23,6 +23,10 @@
 		{
 			"name": "👁️ examples/crud-generate",
 			"path": "../../examples/v1/crud-generate/"
+		},
+		{
+			"name": "👁️ examples/observe",
+			"path": "../../examples/v1/graphql"
 		}
 	]
 }
