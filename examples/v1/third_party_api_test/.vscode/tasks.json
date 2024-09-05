@@ -1,0 +1,10 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Generate .env",
+            "type": "shell",
+            "command": "docker images | grep worker | head -n 1 | awk '{print \"SHA=\"$2 }'   > .env",
+        }
+    ]
+}

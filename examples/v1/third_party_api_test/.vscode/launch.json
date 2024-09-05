@@ -1,0 +1,151 @@
+// "https://raw.githubusercontent.com/box/box-openapi/main/openapi.json",
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/app.js",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    // Javascript Generate
+    {
+      "name": "⚙️ tester generate box",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/../../../cmd/skyramp",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "tester",
+        "generate",
+        "rest",
+        "--alias",
+        "box",
+        "--paths",
+        "/folders",
+        "--api-schema",
+        "https://raw.githubusercontent.com/box/box-openapi/be670381a54ff26af098ea2d188726e0a3545b79/openapi.json",
+        "--port",
+        "9000",
+        "--language",
+        "python",
+        "-f",
+        "--address",
+        "api.box.com"
+      ],
+    },
+    {
+      "name": "⚙️ tester generate openapi",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/../../../cmd/skyramp",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "tester",
+        "generate",
+        "rest",
+        "--alias",
+        "openapi",
+        "--paths",
+        "/organization/projects/{project_id}",
+        "--api-schema",
+        "https://raw.githubusercontent.com/openai/openai-openapi/master/openapi.yaml",
+        "--port",
+        "443",
+        "--language",
+        "python",
+        "-f",
+        "--address",
+        "api.openai.com"
+      ],
+    },
+    {
+      "name": "⚙️ tester generate rafay",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/../../../cmd/skyramp",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "tester",
+        "generate",
+        "rest",
+        "--alias",
+        "infra",
+        "--paths",
+        "/apis/infra.k8smgmt.io/v3/projects/{project}/credentials",
+        "--api-schema",
+        "${workspaceFolder}/../mocker-generate/api/openapi-rafay.json",
+        "--port",
+        "8080",
+        "--language",
+        "python",
+        "-f",
+      ],
+    },
+    {
+      "name": "⚙️ tester generate python",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/../../../cmd/skyramp",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "tester",
+        "generate",
+        "rest",
+        "--alias",
+        "infra",
+        "--paths",
+        "/apis/infra.k8smgmt.io/v3/projects/{project}/credentials",
+        "--api-schema",
+        "https://qc-console.stage.rafay.dev/apis/.well-known/openapi.json",
+        "--sample-request",
+        "data/credentials.json",
+        "--port",
+        "8080",
+        "--language",
+        "python"
+      ],
+    },
+    {
+      "name": "🚀 Debug infra.spec.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/playwright",
+      "args": [
+        "test",
+        "--timeout=0",
+        "${workspaceFolder}/infra.spec.js"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "SKYRAMP_DEBUG": "true",
+        "SKYRAMP_WORKER_ADDRESS": "localhost:45555",
+        "SKYRAMP_TEST_NAME": "skyramp test",
+        "SKYRAMP_SCENARIO_NAME": "test scenario"
+      }
+    },
+    {
+      "name": "🐍 Debug infra_test.py",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/infra_test.py",
+      "preLaunchTask": "Generate .env",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "env": {
+        "SKYRAMP_DEBUG": "true",
+        "PYTHONPATH": "${workspaceFolder}/../../../libs/pip/src/",
+      }
+    }
+  ]
+}

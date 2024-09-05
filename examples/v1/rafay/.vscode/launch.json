@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/app.js",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
+      "name": "⚙️ mocker apply",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/../../../cmd/skyramp",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "mocker",
+        "apply",
+        "rbac-mock",
+        "--address",
+        "localhost:60000"
+      ],
+    },
+  ]
+}
