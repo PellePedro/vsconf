@@ -20,18 +20,16 @@ fi
 : ${SKYRAMPDIR:=$HOME/git/letsramp/skyramp}
 : ${SAMPLE:=$SKYRAMPDIR/skyramp}
 : ${SKYRAMP:=$SKYRAMPDIR/bin/skyramp}
-goVersion=go1.22.6
 
-ls $HOME/sdk
-
-if [ ! -d $HOME/sdk/${goVersion} ]; then
-    echo expecting "go version ${goVersion}"
+if [ -f $SCRIPT_DIR/env ]; then
+    source $SCRIPT_DIR/env
+else
+    echo "env file not found!"
     exit 1
 fi
-echo "using go sdk ${goVersion}"
-export GOBIN=$HOME/go/bin
-export PATH=$HOME/sdk/$goVersion/bin:$GOBIN:$PATH
 
+ls $HOME/sdk
+echo "using go sdk ${goVersion}"
 
 cluster_name=$($SKYRAMP cluster list | grep context | awk '{ print $3 }' | sed 's/^kind-//')
 
@@ -74,6 +72,28 @@ function build_so {
     popd
 }
 
+function test_pip {
+    pushd $SKYRAMPDIR
+    rm -rf $SKYRAMPDIR/venv || true
+    python3 -m venv venv
+    source $SKYRAMPDIR/venv/bin/activate
+    python3 -m pip install --upgrade pip
+    pip install -r $SKYRAMPDIR/libs/test/pip/requirements.txt
+    pip install pytest pyyaml
+    # Use PYTHONPATH to import the skyramp module
+    pushd libs/pip
+    python3 -m pip install --upgrade pip
+    python3 -m pip install --upgrade build
+    python3 -m build
+    pip install dist/*.tar.gz
+    popd
+    pushd libs/test/pip
+    export SHA=$(git rev-parse HEAD)
+    python3 -m pytest -vvv
+    popd
+    popd
+}
+
 function build_pip {
     pushd $SKYRAMPDIR
     rm -rf $SKYRAMPDIR/venv || true
@@ -91,7 +111,7 @@ function build_pip {
     # popd
     popd
 }
-
+ 
 function build_npm {
     pushd $SKYRAMPDIR/libs/npm
     npm pack
@@ -186,6 +206,7 @@ descriptions=(
     "Build library (make release-so)"
     "Recreate cluster"
     "Execute run_all"
+    "test pip"
     "Remove cluster"
     "Configure current npm project for debugging"
     "Configure current pip project for debugging"
@@ -201,6 +222,7 @@ actions=(
     "build_so"
     "recreate_cluster"
     "run_all_test"
+    "test_pip"
     "remove_cluster"
     "configure_npm_for_debugging"
     "configure_python_for_debugging"

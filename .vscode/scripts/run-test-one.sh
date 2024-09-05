@@ -75,18 +75,17 @@ crud_negative_test
 proxy_rest
 mocker_generate
 third_party_api_test
-run_all
 )
 
 git clean -fd $SKYRAMPDIR/examples
-selected_index=$(printf "%s\n" "${actions[@]}" | fzf)
+# selected_index=$(printf "%s\n" "${actions[@]}" | fzf)
 
-# check id the selected index is run_all
 LOGFILE="$SKYRAMPDIR/logfile.log"
-if [ "$selected_index" == "run_all" ]; then
-    echo "Running all tests"
-    for action in "${actions[@]}"; do
+
+for action in "${actions[@]}"; do
+    # if [ "$action" == "$selected_index" ]; then
         log_start "Running test: $action"
+
         # Run the action in a subshell and capture the exit status
         if ( $action &>> "$LOGFILE" ); then
             log_success "Test succeeded: $action"
@@ -94,24 +93,6 @@ if [ "$selected_index" == "run_all" ]; then
             log_failure "Test failed: $action"
             exit 1  # Stop execution if the action failed
         fi
-    done
-else
-    echo "Running test: $selected_index"
-    for action in "${actions[@]}"; do
-        if [ "$action" == "$selected_index" ]; then
-            log_start "Running test: $action"
-
-            # Run the action in a subshell and capture the exit status
-            if ( $action &>> "$LOGFILE" ); then
-                log_success "Test succeeded: $action"
-            else
-                log_failure "Test failed: $action"
-                exit 1  # Stop execution if the action failed
-            fi
-        fi
-    done
-fi
-
-
-
+    # fi
+done
 
