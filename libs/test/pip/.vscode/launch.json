@@ -32,6 +32,7 @@
             "justMyCode": true,
             "env": {
                 "SKYRAMP_DEBUG" : "true",
+                "PYTHONPATH": "${workspaceFolder}/../../pip/src"
             }
         }
     ]
