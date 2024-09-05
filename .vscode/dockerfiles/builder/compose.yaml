@@ -1,0 +1,16 @@
+services:
+  go_1_19_builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: go_1_19_builder
+    image: go_1_19_builder:latest
+    user: "1000:1000"
+    command: ["sleep", "infinity"]
+    volumes:
+      - ./scripts:/scripts
+      - ${HOME}/git/letsramp/skyramp/:/home/workspace/skyramp
+      - /var/run/docker.sock:/var/run/docker.sock
+    
+networks: {}
+  
