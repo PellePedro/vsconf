@@ -1,0 +1,20 @@
+---
+# Source: worker/templates/skyramp-worker-rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: skyramp-worker
+  labels:
+    helm.sh/chart: worker-0.1.86
+    app.kubernetes.io/name: skyramp-worker
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/part-of: skyramp
+    app.kubernetes.io/version: "v0.4.95"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edit
+subjects:
+  - kind: ServiceAccount
+    name: skyramp-worker

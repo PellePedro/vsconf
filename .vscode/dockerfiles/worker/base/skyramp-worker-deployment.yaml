@@ -1,0 +1,66 @@
+---
+# Source: worker/templates/skyramp-worker-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skyramp-worker
+  labels:
+    helm.sh/chart: worker-0.1.86
+    app.kubernetes.io/name: skyramp-worker
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/part-of: skyramp
+    app.kubernetes.io/version: "v0.4.95"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: skyramp-worker
+      app.kubernetes.io/instance: dev
+      app.kubernetes.io/part-of: skyramp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: skyramp-worker
+        app.kubernetes.io/instance: dev
+        app.kubernetes.io/part-of: skyramp
+    spec:
+      serviceAccountName: skyramp-worker
+      securityContext:
+        {}
+      volumes:
+        - name: worker
+          configMap:
+            name: skyramp-worker
+        - name: skyramp-worker-files-grpc
+          configMap:
+            name: skyramp-worker-files-grpc
+        - name: skyramp-worker-files-thrift
+          configMap:
+            name: skyramp-worker-files-thrift
+      containers:
+        - name: worker
+          securityContext:
+            {}
+          image: "public.ecr.aws/j1n2c2p2/rampup/worker:v0.4.95"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: worker
+              mountPath: /etc/skyramp
+            - name: skyramp-worker-files-grpc
+              mountPath: /etc/skyramp/idl/grpc/files
+            - name: skyramp-worker-files-thrift
+              mountPath: /etc/skyramp/idl/thrift/files
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /readyz
+          #     port: 35142 
+          resources:
+            {}

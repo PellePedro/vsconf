@@ -42,14 +42,3 @@ apt-get install -y --no-install-recommends \
 apt-get autoremove && \
     apt-get clean
 
-if [ -z "$GO_VERSION" ]; then
-    echo "Go version not provided"
-    exit 1
-fi
-wget https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
-    rm go${GO_VERSION}.linux-amd64.tar.gz
-
-go install github.com/golangci/golangci-lint/cmd/golangci-lint@$GOLANGCI_LINT_VERSION
-go install honnef.co/go/tools/cmd/staticcheck@$STATICCHECK_VERSION
-

@@ -43,6 +43,13 @@ function load_worker_image_to_cluster {
     kind load docker-image $worker_url:$worker_tag --name $cluster_name
 }
 
+function port_forward_debug_worker {
+    NS=worker
+    DEBUG_PORT=8001
+    echo "Port forwarding worker to http://10.0.0.111?folder=/home/workspace/skyramp"
+    kubectl port-forward --address 0.0.0.0 deployment/skyramp-worker -n ${NS} ${DEBUG_PORT}:3000
+}
+
 # launch compose with worker in debug dev container
 function compose_up_debug_worker {
     compose_dir=$SCRIPT_DIR/../dockerfiles/worker-debug
@@ -73,24 +80,10 @@ function build_so {
 }
 
 function test_pip {
-    pushd $SKYRAMPDIR
-    rm -rf $SKYRAMPDIR/venv || true
-    python3 -m venv venv
-    source $SKYRAMPDIR/venv/bin/activate
-    python3 -m pip install --upgrade pip
-    pip install -r $SKYRAMPDIR/libs/test/pip/requirements.txt
-    pip install pytest pyyaml
-    # Use PYTHONPATH to import the skyramp module
-    pushd libs/pip
-    python3 -m pip install --upgrade pip
-    python3 -m pip install --upgrade build
-    python3 -m build
-    pip install dist/*.tar.gz
-    popd
+    build_pip
     pushd libs/test/pip
     export SHA=$(git rev-parse HEAD)
     python3 -m pytest -vvv
-    popd
     popd
 }
 
@@ -101,14 +94,13 @@ function build_pip {
     source $SKYRAMPDIR/venv/bin/activate
     python3 -m pip install --upgrade pip
     pip install -r $SKYRAMPDIR/libs/test/pip/requirements.txt
-    pip install pytest pyyaml
     # Use PYTHONPATH to import the skyramp module
-    # pushd libs/pip
-    # python3 -m pip install --upgrade pip
-    # python3 -m pip install --upgrade build
-    # python3 -m build
-    # pip install dist/*.tar.gz
-    # popd
+    pushd libs/pip
+    pip install --upgrade pip setuptools wheel pytest
+    pip install PyYAML==6.0
+    pip install --upgrade build 
+    python3 -m build
+    pip install dist/*.tar.gz
     popd
 }
  
@@ -214,6 +206,7 @@ descriptions=(
     "Load worker image to k8s cluster"
     "Debug (up) worker in compose"
     "Debug (down) worker in compose"
+    "Port forward debug worker"
 )
 
 actions=(
@@ -230,6 +223,7 @@ actions=(
     "load_worker_image_to_cluster"
     "compose_up_debug_worker"
     "compose_down_debug_worker"
+    "port_forward_debug_worker"
 )
 
 # Use fzf to select a description

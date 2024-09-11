@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skyramp-worker
+spec:
+  template:
+    spec:
+      containers:
+      - name: worker
+        image: "skyramp-dev-worker:latest"
+        env:
+        - name: CGO_ENABLED
+          value: "1"
+        volumeMounts:
+        - name: source
+          mountPath: /home/workspace/skyramp
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - ls /home/workspace/skyramp
+      volumes:
+      - name: source
+        hostPath:
+          path: /host-mount

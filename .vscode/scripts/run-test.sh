@@ -81,11 +81,16 @@ run_all
 git clean -fd $SKYRAMPDIR/examples
 selected_index=$(printf "%s\n" "${actions[@]}" | fzf)
 
+export SKYRAMP_DEBUG=true
 # check id the selected index is run_all
 LOGFILE="$SKYRAMPDIR/logfile.log"
 if [ "$selected_index" == "run_all" ]; then
     echo "Running all tests"
     for action in "${actions[@]}"; do
+        if [ "$action" == "run_all" ]; then
+            echo "Skipping run_all"
+            continue
+        fi
         log_start "Running test: $action"
         # Run the action in a subshell and capture the exit status
         if ( $action &>> "$LOGFILE" ); then
@@ -99,8 +104,12 @@ else
     echo "Running test: $selected_index"
     for action in "${actions[@]}"; do
         if [ "$action" == "$selected_index" ]; then
+            if [ "$action" == "run_all" ]; then
+                echo "Skipping run_all"
+                continue
+            fi
+            # $action
             log_start "Running test: $action"
-
             # Run the action in a subshell and capture the exit status
             if ( $action &>> "$LOGFILE" ); then
                 log_success "Test succeeded: $action"

@@ -1,0 +1,24 @@
+---
+# Source: worker/templates/skyramp-worker-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: skyramp-worker
+  labels:
+    helm.sh/chart: worker-0.1.86
+    app.kubernetes.io/name: skyramp-worker
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/part-of: skyramp
+    app.kubernetes.io/version: "v0.4.95"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 35142 
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: skyramp-worker
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/part-of: skyramp

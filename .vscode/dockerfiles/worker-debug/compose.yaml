@@ -7,7 +7,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: skyramp-dev:latest
+    image: skyramp-dev-worker:latest
     ports:
       - 45555:35142
       - 6001:3000
