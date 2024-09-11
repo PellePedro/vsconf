@@ -1,0 +1,32 @@
+#!/bin/bash
+
+goVersion=go1.19.2
+export PATH=$HOME/sdk/$goVersion/bin:$PATH
+export GOBIN=$HOME/sdk/$goVersion/bin
+golangci_version=v1.50.0
+staticcheck_version=2023.1.2
+
+function setup_go() {
+    goVersion=$1
+    if [ ! -d $HOME/{goVersion} ]; then
+        echo "installing go sdk ${goVersion}"
+        go install golang.org/dl/${goVersion}@latest
+        ${goVersion} download
+    fi
+    echo "using go sdk ${goVersion}"
+    export GOBIN=$HOME/sdk/$goVersion/bin
+    export PATH=$HOME/sdk/$goVersion/bin:$PATH
+    go version
+
+    if [ ! -f $GOBIN/golangci-lint ]; then
+        echo "installing golangci-lint"
+        go install github.com/golangci/golangci-lint/cmd/golangci-lint@${golangci_version} 
+    fi
+
+    if [ ! -f $GOBIN/staticcheck ]; then
+        go install honnef.co/go/tools/cmd/staticcheck@${staticcheck_version}
+    fi
+}
+
+setup_go $goVersion
+
