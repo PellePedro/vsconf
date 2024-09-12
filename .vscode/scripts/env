@@ -8,7 +8,7 @@ staticcheck_version=2023.1.2
 
 function setup_go() {
     goVersion=$1
-    if [ ! -d $HOME/{goVersion} ]; then
+    if [ ! -d $HOME/sdk/{goVersion} ]; then
         echo "installing go sdk ${goVersion}"
         go install golang.org/dl/${goVersion}@latest
         ${goVersion} download
