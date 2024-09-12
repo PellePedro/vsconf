@@ -1,7 +1,7 @@
 {
 	"folders": [
 		{
-			"name":  "🦋 skyramp",
+			"name": "🦋 skyramp",
 			"path": "../.."
 		},
 		{
@@ -21,12 +21,19 @@
 			"path": "../../libs/test/pip"
 		},
 		{
-			"name": "👁️ examples/crud-generate",
-			"path": "../../examples/v1/crud-generate/"
+			"name": "👁️ examples/third_party-api-test",
+			"path": "../../examples/v1/third_party_api_test"
 		},
+        {
+			"name": "👁️ examples/grpc",
+            "path": "../../examples/v1/grpc"
+        },
+        {
+			"name": "👁️ examples/compose",
+            "path": "../../examples/v1/compose"
+        },
 		{
-			"name": "👁️ examples/observe",
-			"path": "../../examples/v1/graphql"
-		}
-	]
+			"path": "../../examples/v1/rafay"
+        },
+    ]
 }

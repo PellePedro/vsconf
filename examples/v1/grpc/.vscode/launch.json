@@ -1,0 +1,36 @@
+// "https://raw.githubusercontent.com/box/box-openapi/main/openapi.json",
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "⚙️ Mocker Appply Hello World",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/../../../cmd/skyramp",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "mocker",
+        "apply",
+        "helloworld",
+        "--address",
+        "localhost:45555",
+      ],
+    },
+    {
+      "name": "⚙️ Tester start hellow world",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/../../../cmd/skyramp",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "tester",
+        "start",
+        "helloworld-docker",
+        "--address",
+        "localhost:45555",
+      ],
+    }
+  ]
+}

@@ -81,7 +81,7 @@ git config --global --add safe.directory ${GIT_POD_ROOT}
 rm -f /usr/local/lib/skyramp/idl/grpc/skyramp*.*
 rm -rf /etc/skyramp/runtime/*
 cp ${GIT_POD_ROOT}/scripts/skyramp-init.py /
-ln -s ${GIT_POD_ROOT}/web/templates /home/workspace/tmpl
+ln -s ${GIT_POD_ROOT}/web/templates /home/workspace/skyramp/tmpl
 go run ./cmd/airgap
 go mod download
 EOF
