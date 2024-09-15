@@ -33,7 +33,8 @@
             "path": "../../examples/v1/compose"
         },
 		{
-			"path": "../../examples/v1/rafay"
-        },
-    ]
+			"name": "👁️ examples/graphql",
+			"path": "../../examples/v1/graphql"
+		}
+	]
 }

@@ -1,0 +1,61 @@
+// "https://raw.githubusercontent.com/box/box-openapi/main/openapi.json",
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "⚙️ tester generate spacex",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/../../../cmd/skyramp",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "tester",
+        "generate",
+        "graphql",
+        "--alias",
+        "bedrock",
+        "--graphql-url-path",
+        "/",
+        "--sample-request",
+        "${workspaceFolder}/files/sample-request-spacex.yaml",
+        "--port",
+        "443",
+        "--address",
+        "spacex-production.up.railway.app",
+        "--language",
+        "javascript",
+        "--test-format",
+        "jest"
+      ],
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "👨🏻‍🎨 Bedrock Tests",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": [
+        "--testTimeout=800000",
+        "--runInBand",
+        "--colors",
+        "${workspaceFolder}/bedrock.spec.js"
+      ],
+      "env": {
+        "SKYRAMP_DEBUG": "true",
+        // "SKYRAMP_WORKER_ADDRESS": "localhost:35144",
+        "SKYRAMP_DEPLOY_WORKER": "true",
+        "SKYRAMP_NAMESPACE": "skyramp-bedrock",
+        "SKYRAMP_WORKER_IMAGE": "296613639307.dkr.ecr.us-west-2.amazonaws.com/dev/worker:489e3ae5",
+        "KUBECONFIG_PATH": "/home/pedro/.kube/config",
+        "SKYRAMP_SCENARIO_NAME": "scenario",
+        "SKYRAMP_TEST_NAME": "test",
+        "GLOBAL_VARS": "token:org_rTEQiAAoV2qojNWp:d89fcbe9-47f6-470f-bed8-731bbeb73bd4"
+      },
+      "internalConsoleOptions": "openOnSessionStart",
+      "outputCapture": "std",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+    },   
+  ]
+}

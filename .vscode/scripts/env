@@ -1,12 +1,14 @@
 #!/bin/bash
 
-goVersion=go1.19.2
+#goVersion=go1.19.2
+goVersion=go1.22.6
 export PATH=$HOME/sdk/$goVersion/bin:$PATH
 export GOBIN=$HOME/sdk/$goVersion/bin
-golangci_version=v1.50.0
+golangci_Version=1.59.0
 staticcheck_version=2023.1.2
 
-function setup_go() {
+function verify_go()
+{
     goVersion=$1
     if [ ! -d $HOME/sdk/{goVersion} ]; then
         echo "installing go sdk ${goVersion}"
@@ -20,13 +22,22 @@ function setup_go() {
 
     if [ ! -f $GOBIN/golangci-lint ]; then
         echo "installing golangci-lint"
-        go install github.com/golangci/golangci-lint/cmd/golangci-lint@${golangci_version} 
+        GOLANGCI_URL=https://github.com/golangci/golangci-lint/releases/download/v${golangci_Version}/golangci-lint-${golangci_Version}-linux-amd64.tar.gz
+        wget "$GOLANGCI_URL" 
+        tar -xzf "golangci-lint-${golangci_Version}-linux-amd64.tar.gz"
+        mv "golangci-lint-${golangci_Version}-linux-amd64/golangci-lint" $GOBIN
+        rm -rf "golangci-lint-${golangci_Version}-linux-amd64"
     fi
 
     if [ ! -f $GOBIN/staticcheck ]; then
-        go install honnef.co/go/tools/cmd/staticcheck@${staticcheck_version}
+        echo "installing staticcheck"
+        wget https://github.com/dominikh/go-tools/releases/download/${staticcheck_version}/staticcheck_linux_amd64.tar.gz
+        tar -xzf staticcheck_linux_amd64.tar.gz
+        mv staticcheck/staticcheck $GOBIN
+        rm -rf staticcheck
     fi
 }
 
-setup_go $goVersion
+verify_go $goVersion
+
 
