@@ -1,0 +1,36 @@
+// "https://raw.githubusercontent.com/box/box-openapi/main/openapi.json",
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "👨🏻‍🎨 Mocker Apply REST",
+        "type": "go",
+        "request": "launch",
+        "mode": "auto",
+        "program": "${workspaceFolder}/../../../cmd/skyramp",
+        "cwd": "${workspaceFolder}",
+        "args": [
+          "mocker",
+          "apply",
+          "mocks/echo.yaml",
+          "--address",
+          "localhost:45555"
+        ],
+      },
+      {
+        "type": "go",
+        "name": "👨🏻‍🎨 Rest Tests",
+        "request": "launch",
+        "mode": "auto",
+        "program": "${workspaceFolder}/../../../cmd/skyramp",
+        "cwd": "${workspaceFolder}",
+        "args": [
+          "tester",
+          "start",
+          "test-load",
+          "--address",
+          "localhost:45555"
+        ],
+      },   
+    ]
+  }
