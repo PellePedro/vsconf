@@ -19,6 +19,24 @@ USER root
 COPY --from=go /usr/local/go /usr/local/go
 COPY --from=gopls /bin /usr/local/bin/gopls
 COPY --from=dlv /bin /usr/local/bin/dlv
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y  \
+        build-essential  \
+        protobuf-compiler \
+        curl \
+        git  \
+        net-tools \
+        dnsutils \
+        iputils-ping \
+        iproute2 \
+        jq \
+        nnn \
+        procps \
+        ripgrep \
+        sudo \
+        sqlite \
+        wget \
+        zsh
+
 RUN chmod +x /usr/local/bin/*
 RUN --mount=type=bind,target=/tmp/scripts,source=./scripts,ro \
     for script in /tmp/scripts/*; do \
