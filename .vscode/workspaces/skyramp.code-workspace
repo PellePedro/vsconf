@@ -1,40 +1,7 @@
 {
 	"folders": [
 		{
-			"name": "🦋 skyramp",
 			"path": "../.."
-		},
-		{
-			"name": "📦 Javascript sdk",
-			"path": "../../libs/npm"
-		},
-		{
-			"name": "🐍 Python sdk",
-			"path": "../../libs/pip"
-		},
-		{
-			"name": "📦 🧪 npm test",
-			"path": "../../libs/test/npm"
-		},
-		{
-			"name": "🐍 🧪 pip test",
-			"path": "../../libs/test/pip"
-		},
-		{
-			"name": "👁️ examples/third_party-api-test",
-			"path": "../../examples/v1/third_party_api_test"
-		},
-        {
-			"name": "👁️ examples/grpc",
-            "path": "../../examples/v1/grpc"
-        },
-        {
-			"name": "👁️ examples/compose",
-            "path": "../../examples/v1/compose"
-        },
-		{
-			"name": "👁️ examples/graphql",
-			"path": "../../examples/v1/graphql"
 		}
 	]
 }

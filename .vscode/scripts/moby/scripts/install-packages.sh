@@ -9,6 +9,11 @@ apt-get install -y  \
         curl \
         git  \
         net-tools \
+        dnsutils \
+        iputils-ping \
+        iproute2 \
+        jq \
+        nc \
         nnn \
         procps \
         ripgrep \
