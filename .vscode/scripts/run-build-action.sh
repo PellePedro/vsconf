@@ -96,8 +96,12 @@ function build_all {
     PATH=$PATH make all
     make build-worker
     build_so
-    build_pip
-    build_npm
+    make pip-package-and-install
+    pushd $SKYRAMPDIR/libs/npm
+    npm pack
+    popd
+    recreate_cluster
+    run_all_test
 }
 
 # configure python for debugging

@@ -3,6 +3,16 @@ services:
     build:
       context: services/infra
     image: crud-generate:v0.0
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: skyramp-dev-worker:latest
+    ports:
+      - 8001:3000
+    volumes:
+      - ${DASHBOARD_PATH}:/home/workspace/dashboard
+      - /var/run/docker.sock:/var/run/docker.sock
   worker:
     build:
       context: .
@@ -13,7 +23,11 @@ services:
       - 6001:3000
     volumes:
       - ./scripts:/scripts
-      - ${HOME}/git/letsramp/skyramp/:/home/workspace/skyramp
+      - ${SKYRAMP_PATH}:/home/workspace/skyramp
       - ${HOME}/go/pkg:/root/go/pkg
       - /var/run/docker.sock:/var/run/docker.sock
+  opentsdb:
+    image: petergrace/opentsdb-docker:latest
+    ports:
+      - "4242:4242"
 networks: {}

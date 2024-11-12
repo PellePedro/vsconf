@@ -13,6 +13,8 @@ apt-get install -y  \
         iputils-ping \
         iproute2 \
         jq \
+        netcat \
+        socat \
         nnn \
         procps \
         ripgrep \
