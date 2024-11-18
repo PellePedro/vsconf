@@ -19,24 +19,6 @@ USER root
 COPY --from=go /usr/local/go /usr/local/go
 COPY --from=gopls /bin /usr/local/bin/gopls
 COPY --from=dlv /bin /usr/local/bin/dlv
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y  \
-        build-essential  \
-        protobuf-compiler \
-        curl \
-        git  \
-        net-tools \
-        dnsutils \
-        iputils-ping \
-        iproute2 \
-        jq \
-        nnn \
-        procps \
-        ripgrep \
-        sudo \
-        sqlite \
-        wget \
-        zsh
-
 RUN chmod +x /usr/local/bin/*
 RUN --mount=type=bind,target=/tmp/scripts,source=./scripts,ro \
     for script in /tmp/scripts/*; do \
@@ -46,6 +28,7 @@ RUN --mount=type=bind,target=/tmp/scripts,source=./scripts,ro \
 SHELL ["/bin/bash", "-c"]
 RUN \
     exts=(\
+        vscodevim.vim \
         gitpod.gitpod-theme \
         humao.rest-client \
         golang.go \
@@ -53,3 +36,7 @@ RUN \
         ms-python.debugpy \
     )\
     && for ext in "${exts[@]}"; do ${OPENVSCODE} --install-extension "${ext}"; done
+
+EXPOSE 6001 35142 3000
+
+ENTRYPOINT [ "/bin/sh", "-c", "exec ${OPENVSCODE_SERVER_ROOT}/bin/openvscode-server --host 0.0.0.0 --port 6001 --without-connection-token \"${@}\"", "--" ]

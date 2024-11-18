@@ -7,12 +7,26 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: skyramp-dev-worker:latest
+    image: skyramp-dev-dashboard:latest
+    environment:
+      - DOCKER_ENV=true
+      - WORKER_FQDN=worker
     ports:
-      - 8001:3000
+      - 8001:6001
+      - 3000:3000
+      - 35142:35142
     volumes:
+      - ./scripts:/scripts
+      - ${SKYRAMP_PATH}:/home/workspace/skyramp
+      - ${HOME}/go/pkg:/root/go/pkg
       - ${DASHBOARD_PATH}:/home/workspace/dashboard
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      dev_network:
+        aliases:
+          - dashboard-server
+          - dashboard-client
+          - worker
   worker:
     build:
       context: .
@@ -20,14 +34,41 @@ services:
     image: skyramp-dev-worker:latest
     ports:
       - 45555:35142
-      - 6001:3000
+      - 6001:6001
     volumes:
       - ./scripts:/scripts
       - ${SKYRAMP_PATH}:/home/workspace/skyramp
       - ${HOME}/go/pkg:/root/go/pkg
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - dev_network
   opentsdb:
     image: petergrace/opentsdb-docker:latest
     ports:
       - "4242:4242"
-networks: {}
+    networks:
+      - dev_network
+
+  mongodb:
+    image: mongo:6.0.6
+    container_name : mongo-datastore-svc
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: skyramp
+      MONGO_INITDB_DATABASE: dashboarddb
+    volumes:
+      - mongodb:/data/db
+      - /var/run/docker.sock:/var/run/docker.sock 
+    networks:
+      dev_network:
+        aliases:
+          - mongo-datastore-svc
+volumes:
+  mongodb:
+  skyramp:
+
+networks:
+  dev_network:
+    driver: bridge

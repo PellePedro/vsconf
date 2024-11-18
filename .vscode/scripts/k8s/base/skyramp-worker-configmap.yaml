@@ -19,9 +19,10 @@ data:
       mockCollection: servicemocks
       mongodbUrl: mongodb://admin:pa$$word@mongo-datastore-svc.skyramp:27017/?authSource=admin&authMechanism=SCRAM-SHA-256
       testResultCollection: testresults
-    prometheusConfig:
+    metricsConfig:
+      type: opentsdb
       enabled: true
-      pushGatewayUrl: http://prom-prometheus-pushgateway.skyramp:9091
+      pushGatewayUrl: http://opentsdb.skyramp:9091
   config.yaml: |
     backend: kubernetes
     managementPort: 35142
